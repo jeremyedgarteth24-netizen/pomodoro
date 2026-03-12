@@ -1,0 +1,17 @@
+{
+  "name": "Pomodoro Pro",
+  "short_name": "Pomodoro",
+  "description": "Aplicación de productividad con el método Pomodoro.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#e74c3c",
+  "theme_color": "#e74c3c",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3239/3239147.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
