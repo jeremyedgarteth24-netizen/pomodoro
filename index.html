@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#e74c3c">
+    <title>Pomodoro Pro</title>
+    <style>
+        body { background-color: #e74c3c; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif; transition: background-color 0.8s ease; overflow: hidden; }
+        h1 { margin-bottom: 5px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; font-size: 1.2rem; }
+        #timer { font-size: 100px; font-weight: bold; margin-bottom: 40px; text-shadow: 0 4px 15px rgba(0,0,0,0.2); font-variant-numeric: tabular-nums; }
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 85%; max-width: 400px; }
+        button { padding: 22px; font-size: 18px; font-weight: bold; border: none; border-radius: 20px; background: rgba(255, 255, 255, 0.2); color: white; backdrop-filter: blur(10px); cursor: pointer; }
+        .reset { grid-column: span 2; background: rgba(0,0,0,0.15); }
+        .work-bg { background-color: #e74c3c; }
+        .break-bg { background-color: #3498db; }
+    </style>
+</head>
+<body class="work-bg">
+    <h1 id="status">Enfoque</h1>
+    <div id="timer">25:00</div>
+    <div class="controls">
+        <button onclick="start()">Iniciar</button>
+        <button onclick="setBreak()">Descanso</button>
+        <button class="reset" onclick="reset()">Reiniciar</button>
+    </div>
+    <script>
+        let timer; let timeLeft = 25 * 60; let isRunning = false;
+        const timerDisplay = document.getElementById('timer');
+        function updateDisplay() {
+            const min = Math.floor(timeLeft / 60); const sec = timeLeft % 60;
+            timerDisplay.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+        function start() {
+            if (isRunning) return; isRunning = true;
+            timer = setInterval(() => {
+                if (timeLeft > 0) { timeLeft--; updateDisplay(); }
+                else { clearInterval(timer); isRunning = false; alert("¡Tiempo cumplido!"); }
+            }, 1000);
+        }
+        function setBreak() { clearInterval(timer); isRunning = false; timeLeft = 5 * 60; document.body.className = 'break-bg'; document.getElementById('status').textContent = "Descanso"; updateDisplay(); }
+        function reset() { clearInterval(timer); isRunning = false; timeLeft = 25 * 60; document.body.className = 'work-bg'; document.getElementById('status').textContent = "Enfoque"; updateDisplay(); }
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js'); }); }
+        updateDisplay();
+    </script>
+</body>
+</html>
